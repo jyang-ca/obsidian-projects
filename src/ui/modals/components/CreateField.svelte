@@ -45,6 +45,7 @@
   export let onCreate: (field: DataField, value: Optional<DataValue>) => void;
 
   $: fieldNameError = validateFieldName(field.name);
+  $: progressFieldError = validateProgressField(field.type);
 
   function validateFieldName(fieldName: string) {
     if (fieldName.trim() === "") {
@@ -55,6 +56,16 @@
       return $i18n.t("modals.field.create.existing-name-error");
     }
 
+    return "";
+  }
+
+  function validateProgressField(fieldType: DataFieldType) {
+    if (fieldType === DataFieldType.Progress) {
+      const hasProgressField = existingFields.some(field => field.type === DataFieldType.Progress);
+      if (hasProgressField) {
+        return "Only one Progress field is allowed per project";
+      }
+    }
     return "";
   }
 
@@ -70,6 +81,7 @@
       [DataFieldType.Number]: (v: number) => v.toString(),
       [DataFieldType.Boolean]: (v: boolean) => v.toString(),
       [DataFieldType.Date]: (v: string) => v.toString(),
+      [DataFieldType.Progress]: (v: number) => v.toString(),
       [DataFieldType.List]: (v: Array<string>) => v.toString(),
       [DataFieldType.Unknown]: () => null,
     },
@@ -78,6 +90,7 @@
       [DataFieldType.Number]: (v: number) => v,
       [DataFieldType.Boolean]: (v: boolean) => (v ? 1 : 0),
       [DataFieldType.Date]: (v: string) => dayjs(v).toDate().getTime(),
+      [DataFieldType.Progress]: (v: number) => Math.min(Math.max(v, 0), 100),
       [DataFieldType.List]: (v: Array<string>) => parseInt(v.toString()),
       [DataFieldType.Unknown]: () => null,
     },
@@ -86,6 +99,7 @@
       [DataFieldType.Number]: (v: number) => !!v,
       [DataFieldType.Boolean]: (v: boolean) => v,
       [DataFieldType.Date]: (v: string) => !!v,
+      [DataFieldType.Progress]: (v: number) => !!v,
       [DataFieldType.List]: (v: Array<string>) => !!v.toString(),
       [DataFieldType.Unknown]: () => null,
     },
@@ -94,8 +108,18 @@
       [DataFieldType.Number]: (v: number) => dayjs(v).format("YYYY-MM-DD"),
       [DataFieldType.Boolean]: () => dayjs().format("YYYY-MM-DD"),
       [DataFieldType.Date]: (v: string) => v,
+      [DataFieldType.Progress]: (v: number) => dayjs().format("YYYY-MM-DD"),
       [DataFieldType.List]: (v: Array<string>) =>
         dayjs(v.toString()).format("YYYY-MM-DD"),
+      [DataFieldType.Unknown]: () => null,
+    },
+    [DataFieldType.Progress]: {
+      [DataFieldType.String]: (v: string) => Math.min(Math.max(parseInt(v) || 0, 0), 100),
+      [DataFieldType.Number]: (v: number) => Math.min(Math.max(v, 0), 100),
+      [DataFieldType.Boolean]: (v: boolean) => v ? 100 : 0,
+      [DataFieldType.Date]: (v: string) => 0,
+      [DataFieldType.Progress]: (v: number) => Math.min(Math.max(v, 0), 100),
+      [DataFieldType.List]: (v: Array<string>) => 0,
       [DataFieldType.Unknown]: () => null,
     },
     [DataFieldType.List]: {
@@ -103,6 +127,7 @@
       [DataFieldType.Number]: (v: number) => [v],
       [DataFieldType.Boolean]: (v: boolean) => [v],
       [DataFieldType.Date]: (v: string) => [v],
+      [DataFieldType.Progress]: (v: number) => [v],
       [DataFieldType.List]: (v: Array<string>) => v,
       [DataFieldType.Unknown]: () => null,
     },
@@ -111,6 +136,7 @@
       [DataFieldType.Number]: () => null,
       [DataFieldType.Boolean]: () => null,
       [DataFieldType.Date]: () => null,
+      [DataFieldType.Progress]: () => null,
       [DataFieldType.List]: () => null,
       [DataFieldType.Unknown]: () => null,
     },
@@ -192,6 +218,7 @@
     { label: $i18n.t("data-types.number"), value: DataFieldType.Number },
     { label: $i18n.t("data-types.boolean"), value: DataFieldType.Boolean },
     { label: $i18n.t("data-types.date"), value: DataFieldType.Date },
+    { label: $i18n.t("data-types.progress"), value: DataFieldType.Progress },
     { label: $i18n.t("data-types.list"), value: DataFieldType.List },
   ];
 
@@ -226,7 +253,14 @@
       name={$i18n.t("modals.field.create.type.name")}
       description={$i18n.t("modals.field.create.type.description")}
     >
-      <Select value={field.type} {options} on:change={handleTypeChange} />
+      {#if progressFieldError}
+        <div class="error-message">{progressFieldError}</div>
+      {/if}
+      <Select 
+        value={field.type} 
+        {options} 
+        on:change={handleTypeChange}
+      />
     </SettingItem>
 
     <SettingItem
@@ -279,6 +313,20 @@
             }}
           />
         {/if}
+      {:else if field.type === DataFieldType.Progress}
+        <NumberInput
+          value={parseInt((value ?? "0").toString())}
+          on:input={(event) => {
+            const val = Math.min(Math.max(event.detail || 0, 0), 100);
+            value = val;
+          }}
+          on:keydown={(ev) => {
+            if (ev.key === "Enter" && !fieldNameError && !progressFieldError) {
+              ev.preventDefault();
+              onCreate(field, value);
+            }
+          }}
+        />
       {:else if field.type === DataFieldType.Boolean}
         <Switch
           checked={value ? true : false}
@@ -319,12 +367,29 @@
           on:check={handleTimeChange}
         />
       </SettingItem>
+      <SettingItem
+        name={$i18n.t("modals.field.configure.dday.name")}
+        description={$i18n.t("modals.field.configure.dday.description")}
+      >
+        <Switch
+          checked={field.typeConfig?.isDday ?? false}
+          on:check={({ detail: isDday }) => {
+            field = {
+              ...field,
+              typeConfig: {
+                ...field.typeConfig,
+                isDday,
+              },
+            };
+          }}
+        />
+      </SettingItem>
     {/if}
   </ModalContent>
   <ModalButtonGroup>
     <Button
       variant={"primary"}
-      disabled={!!fieldNameError}
+      disabled={!!fieldNameError || !!progressFieldError}
       on:click={() => {
         if (field.repeated) {
           onCreate(
@@ -339,6 +404,10 @@
               field.typeConfig?.time ? "YYYY-MM-DDTHH:mm" : "YYYY-MM-DD"
             )
           );
+        } else if (field.type === DataFieldType.Progress) {
+          // Ensure progress value is within 0-100 range
+          const progressValue = Math.min(Math.max(parseInt((value ?? "0").toString()) || 0, 0), 100);
+          onCreate(field, progressValue);
         } else if (field.type === DataFieldType.String) {
           // uniquify options items and omit empty
           if (field?.typeConfig && field.typeConfig?.options) {
@@ -361,3 +430,11 @@
     </Button>
   </ModalButtonGroup>
 </ModalLayout>
+
+<style>
+  .error-message {
+    color: var(--text-error);
+    font-size: var(--font-ui-smaller);
+    margin-top: 4px;
+  }
+</style>

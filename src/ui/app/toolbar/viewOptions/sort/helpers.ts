@@ -70,6 +70,7 @@ export function getOrderByField(field: DataField): Array<{
         { label: "Z → A", value: "desc" },
       ];
     case DataFieldType.Number:
+    case DataFieldType.Progress:
       return [
         { label: "1 → 9", value: "asc" },
         { label: "9 → 1", value: "desc" },

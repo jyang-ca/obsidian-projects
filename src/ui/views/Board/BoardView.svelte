@@ -60,11 +60,20 @@
     hasSort ? sortRecords(records) : [...records]
   );
 
+  console.log("BoardView mounted");
+  console.log("Fields:", JSON.stringify(fields, null, 2));
+  console.log("Records:", JSON.stringify(records, null, 2));
+  console.log("Config:", JSON.stringify(config, null, 2));
+
   const handleRecordClick: OnRecordClick = (record) => {
+    console.log("BoardView handleRecordClick called:", JSON.stringify(record, null, 2));
     new EditNoteModal(
       $app,
       fields,
-      (record) => api.updateRecord(record, fields),
+      (record) => {
+        console.log("BoardView onSave called:", JSON.stringify(record, null, 2));
+        api.updateRecord(record, fields);
+      },
       record
     ).open();
   };
@@ -406,6 +415,7 @@
     };
 
   function saveConfig(cfg: BoardConfig) {
+    console.log("BoardView saveConfig called:", JSON.stringify(cfg, null, 2));
     config = cfg;
     onConfigChange(cfg);
   }

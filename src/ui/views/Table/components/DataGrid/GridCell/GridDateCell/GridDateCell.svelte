@@ -18,6 +18,18 @@
   export let selected: boolean;
 
   let edit = false;
+
+  function formatDday(date: Date | string): string {
+    const today = dayjs().startOf('day');
+    const targetDate = dayjs(date).startOf('day');
+    const diff = targetDate.diff(today, 'day');
+    
+    if (diff === 0) return "D-Day";
+    if (diff < 0) return `D+${Math.abs(diff)}`;
+    return `D-${diff}`;
+  }
+
+  $: isDdayField = column.typeConfig?.isDday;
 </script>
 
 <GridCell
@@ -45,13 +57,20 @@
 >
   <svelte:fragment slot="read">
     {#if value}
-      <TextLabel
-        value={new Intl.DateTimeFormat("default", {
-          year: "numeric",
-          month: "numeric",
-          day: "numeric",
-        }).format(value)}
-      />
+      <div class="date-container">
+        <TextLabel
+          value={new Intl.DateTimeFormat("default", {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric",
+          }).format(value)}
+        />
+        {#if isDdayField}
+          <div class="dday" class:overdue={dayjs(value).isBefore(dayjs(), 'day')}>
+            {formatDday(value)}
+          </div>
+        {/if}
+      </div>
     {/if}
   </svelte:fragment>
   <svelte:fragment slot="edit">
@@ -75,3 +94,23 @@
     />
   </svelte:fragment>
 </GridCell>
+
+<style>
+  .date-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    width: 100%;
+  }
+
+  .dday {
+    font-size: var(--font-ui-smaller);
+    color: var(--text-muted);
+    text-align: center;
+  }
+
+  .dday.overdue {
+    color: var(--text-error);
+  }
+</style>

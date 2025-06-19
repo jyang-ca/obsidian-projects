@@ -184,6 +184,7 @@ export function getOperatorsByField(field: DataField): Array<{
         { label: "is not checked", value: "is-not-checked" },
       ];
     case DataFieldType.Number:
+    case DataFieldType.Progress:
       return [
         ...baseOperators,
         { label: "=", value: "eq" },

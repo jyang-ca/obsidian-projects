@@ -166,9 +166,14 @@ export type StringFieldConfig = {
 
 export type DateFieldConfig = {
   time?: boolean;
+  isDday?: boolean;
 };
 
-export type FieldConfig = StringFieldConfig & DateFieldConfig;
+export type NumberFieldConfig = {
+  // Progress functionality has been moved to DataFieldType.Progress
+};
+
+export type FieldConfig = StringFieldConfig & DateFieldConfig & NumberFieldConfig;
 
 export type ShowCommand = {
   readonly project: string;

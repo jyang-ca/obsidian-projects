@@ -27,6 +27,8 @@ export function fieldIcon(field: DataField): string {
       return "check-square";
     case DataFieldType.Date:
       return field.typeConfig?.time ? "clock" : "calendar";
+    case DataFieldType.Progress:
+      return "trending-up";
   }
   return "file-question";
 }
@@ -52,6 +54,8 @@ export function fieldDisplayText(field: DataField): string {
       return field.typeConfig?.time
         ? get(i18n).t("data-types.datetime")
         : get(i18n).t("data-types.date");
+    case DataFieldType.Progress:
+      return get(i18n).t("data-types.progress");
   }
   return get(i18n).t("data-types.unknown");
 }

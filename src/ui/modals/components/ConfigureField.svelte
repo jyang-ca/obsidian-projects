@@ -79,6 +79,7 @@
     { label: $i18n.t("data-types.number"), value: DataFieldType.Number },
     { label: $i18n.t("data-types.boolean"), value: DataFieldType.Boolean },
     { label: $i18n.t("data-types.date"), value: DataFieldType.Date },
+    { label: $i18n.t("data-types.progress"), value: DataFieldType.Progress },
     { label: $i18n.t("data-types.unknown"), value: DataFieldType.Unknown },
   ];
 </script>
@@ -145,6 +146,23 @@
         <Switch
           checked={field.typeConfig?.time ?? false}
           on:check={handleTimeChange}
+        />
+      </SettingItem>
+      <SettingItem
+        name={$i18n.t("modals.field.configure.dday.name")}
+        description={$i18n.t("modals.field.configure.dday.description")}
+      >
+        <Switch
+          checked={field.typeConfig?.isDday ?? false}
+          on:check={({ detail: isDday }) => {
+            field = {
+              ...field,
+              typeConfig: {
+                ...field.typeConfig,
+                isDday,
+              },
+            };
+          }}
         />
       </SettingItem>
     {/if}

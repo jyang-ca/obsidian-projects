@@ -64,6 +64,7 @@ export enum DataFieldType {
   Number = "number",
   Boolean = "boolean",
   Date = "date",
+  Progress = "progress",
   List = "multitext",
   Unknown = "unknown",
 }
@@ -142,6 +143,12 @@ export function isDate(value: Optional<DataValue> | DataValue): value is Date {
   return value instanceof Date;
 }
 
+export function isProgress(
+  value: Optional<DataValue> | DataValue
+): value is number {
+  return typeof value === "number" && value >= 0 && value <= 100;
+}
+
 // export function hasValue(value: Optional<DataValue>): value is DataValue {
 //   if (value === null || value === undefined) {
 //     return true;
@@ -181,6 +188,12 @@ export function isOptionalDate(
   value: Optional<DataValue>
 ): value is Optional<Date> {
   return isDate(value) || isOptional(value);
+}
+
+export function isOptionalProgress(
+  value: Optional<DataValue>
+): value is Optional<number> {
+  return isProgress(value) || isOptional(value);
 }
 
 export function isStringLink(value: any): boolean {

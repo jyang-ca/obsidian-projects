@@ -64,6 +64,7 @@
   div {
     padding: 6px;
     width: 100%;
+    text-align: center;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

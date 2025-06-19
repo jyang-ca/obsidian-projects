@@ -23,11 +23,32 @@ export class ViewApi {
     this.dataApi.createNote(record, fields ?? [], templatePath);
   }
 
-  updateRecord(record: DataRecord, fields: DataField[]) {
-    if (this.dataSource.includes(record.id)) {
-      dataFrame.updateRecord(record);
+  async updateRecord(record: DataRecord, fields: DataField[]) {
+    console.log("ViewApi updateRecord called");
+    console.log("Record:", JSON.stringify(record, null, 2));
+    console.log("Fields:", JSON.stringify(fields, null, 2));
+    
+    const progressField = fields.find(field => field.type === 'progress');
+    if (progressField) {
+      console.log("Progress field found:", progressField.name);
+      console.log("Progress value in record:", record.values[progressField.name]);
     }
-    this.dataApi.updateRecord(fields, record);
+    
+    if (this.dataSource.includes(record.id)) {
+      console.log("Updating record in dataFrame store");
+      dataFrame.updateRecord(record);
+      
+      // dataFrame 스토어 상태 확인
+      const currentFrame = get(dataFrame);
+      console.log("DataFrame after update:", {
+        recordCount: currentFrame.records.length,
+        progressValues: currentFrame.records
+          .filter(r => progressField && typeof r.values[progressField.name] === 'number')
+          .map(r => ({ id: r.id, value: r.values[progressField?.name || ''] }))
+      });
+    }
+    await this.dataApi.updateRecord(fields, record);
+    console.log("ViewApi updateRecord completed");
   }
 
   async updateRecords(records: DataRecord[], fields: DataField[]) {

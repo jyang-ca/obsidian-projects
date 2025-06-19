@@ -5,6 +5,7 @@
     isOptionalList,
     isOptionalNumber,
     isOptionalString,
+    isOptionalProgress,
     type Optional,
     type DataValue,
   } from "src/lib/dataframe/dataframe";
@@ -16,6 +17,7 @@
   import { GridDateCell } from "./GridDateCell";
   import { GridDatetimeCell } from "./GridDatetimeCell";
   import { GridNumberCell } from "./GridNumberCell";
+  import GridProgressCell from "./GridProgressCell/GridProgressCell.svelte";
   import { GridTextCell } from "./GridTextCell";
   import { GridListCell } from "./GridListCell";
 
@@ -62,6 +64,17 @@
   />
 {:else if column.type === "number" && isOptionalNumber(value)}
   <GridNumberCell
+    {selected}
+    {rowindex}
+    {colindex}
+    {value}
+    {onChange}
+    {column}
+    on:mousedown
+    on:navigate
+  />
+{:else if column.type === "progress" && isOptionalProgress(value)}
+  <GridProgressCell
     {selected}
     {rowindex}
     {colindex}

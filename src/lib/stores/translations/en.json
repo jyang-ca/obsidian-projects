@@ -10,7 +10,8 @@
             "datetime": "Date & time",
             "list": "List",
             "tags": "Tags",
-            "aliases": "Aliases"
+            "aliases": "Aliases",
+            "progress": "Progress"
         },
         "datasources": {
             "folder": "Folder",
@@ -232,8 +233,16 @@
                         "description": "For fields with Markdown content."
                     },
                     "time": {
-                        "name": "Enable time",
-                        "description": "Recognize this field as Date & time."
+                        "name": "Include time",
+                        "description": "Include time in the date field"
+                    },
+                    "dday": {
+                        "name": "D-day",
+                        "description": "Show D-day countdown for this date field"
+                    },
+                    "progress": {
+                        "name": "Progress",
+                        "description": "Use this number field as a progress indicator (0-100%)"
                     },
                     "save": "Save"
                 },
@@ -360,6 +369,11 @@
                     }
                 },
                 "empty": "This view is empty."
+            },
+            "project": {
+                "progress": {
+                    "title": "Project Progress"
+                }
             }
         },
         "components": {

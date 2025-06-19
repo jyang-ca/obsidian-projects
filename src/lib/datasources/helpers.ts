@@ -39,6 +39,14 @@ export function parseRecords(
             record.values[field.name] = parseFloat(value);
           }
           break;
+        case DataFieldType.Progress:
+          if (typeof value === "string") {
+            const progressValue = parseFloat(value);
+            record.values[field.name] = Math.min(Math.max(progressValue, 0), 100);
+          } else if (typeof value === "number") {
+            record.values[field.name] = Math.min(Math.max(value, 0), 100);
+          }
+          break;
         case DataFieldType.Boolean:
           if (typeof value === "string") {
             record.values[field.name] = stringToBoolean(value);

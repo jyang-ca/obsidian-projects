@@ -29,17 +29,25 @@
   export let project: ProjectDefinition;
   export let frame: DataFrame;
   export let config: GalleryConfig | undefined;
-  export let onConfigChange: (config: GalleryConfig) => void;
+  export let onConfigChange: (cfg: GalleryConfig) => void;
   export let api: ViewApi;
   export let getRecordColor: (record: DataRecord) => string | null;
 
   $: ({ fields, records } = frame);
+  console.log("GalleryView mounted");
+  console.log("Fields:", JSON.stringify(fields, null, 2));
+  console.log("Records:", JSON.stringify(records, null, 2));
+  console.log("Config:", JSON.stringify(config, null, 2));
 
   function handleRecordClick(record: DataRecord) {
+    console.log("GalleryView handleRecordClick called:", JSON.stringify(record, null, 2));
     new EditNoteModal(
       $app,
       fields,
-      (record) => api.updateRecord(record, fields),
+      (record) => {
+        console.log("GalleryView onSave called:", JSON.stringify(record, null, 2));
+        api.updateRecord(record, fields);
+      },
       record
     ).open();
   }
@@ -51,6 +59,7 @@
   }
 
   function saveConfig(cfg: GalleryConfig) {
+    console.log("GalleryView saveConfig called:", JSON.stringify(cfg, null, 2));
     config = cfg;
     onConfigChange(cfg);
   }

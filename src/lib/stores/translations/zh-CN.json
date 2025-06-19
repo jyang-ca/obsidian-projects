@@ -232,8 +232,16 @@
                         "description": "依照 Markdown 格式渲染字段内容。"
                     },
                     "time": {
-                        "name": "启用时间",
-                        "description": "将该字段识别为日期 & 时间格式。"
+                        "name": "包含时间",
+                        "description": "在日期字段中包含时间"
+                    },
+                    "dday": {
+                        "name": "D-day",
+                        "description": "显示此日期字段的D-day倒计时"
+                    },
+                    "progress": {
+                        "name": "进度",
+                        "description": "将此数字字段用作进度指示器（0-100%）"
                     },
                     "save": "保存修改"
                 },
@@ -360,6 +368,11 @@
                     }
                 },
                 "empty": "该视图还没有数据。"
+            },
+            "project": {
+                "progress": {
+                    "title": "项目进度"
+                }
             }
         },
         "components": {

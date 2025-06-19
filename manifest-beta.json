@@ -1,10 +1,10 @@
 {
-  "id": "obsidian-projects",
-  "name": "Projects",
+  "id": "obsidian-projects-jiho",
+  "name": "Projects (Modified by Jiho Yang)",
   "version": "0.0.0-1004",
   "minAppVersion": "1.0.0",
-  "description": "Plain text project planning.",
-  "author": "Marcus Olsson",
+  "description": "Plain text project planning. Modified and improved by Jiho Yang.",
+  "author": "Marcus Olsson, Jiho Yang",
   "authorUrl": "https://marcus.se.net",
   "fundingUrl": "https://www.buymeacoffee.com/marcusolsson",
   "isDesktopOnly": false

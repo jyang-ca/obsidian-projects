@@ -2,12 +2,14 @@
   import { onMount } from "svelte";
 
   import { createProject } from "src/lib/dataApi";
+  import { DataFieldType } from "src/lib/dataframe/dataframe";
   import { api } from "src/lib/stores/api";
   import { i18n } from "src/lib/stores/i18n";
   import { app } from "src/lib/stores/obsidian";
   import { settings } from "src/lib/stores/settings";
   import { ViewApi } from "src/lib/viewApi";
   import { CreateProjectModal } from "src/ui/modals/createProjectModal";
+  import ProjectProgress from "src/ui/views/ProjectProgress.svelte";
 
   import Toolbar from "./toolbar/Toolbar.svelte";
   import { createDemoProject } from "./onboarding/demoProject";
@@ -87,6 +89,9 @@
   <div class="projects-main">
     {#if project}
       <DataFrameProvider {project} let:frame let:source>
+        {#if frame.fields.some(field => field.type === DataFieldType.Progress)}
+          <ProjectProgress fields={frame.fields} records={frame.records} />
+        {/if}
         {#if project && view && source}
           <View
             {project}

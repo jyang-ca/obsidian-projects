@@ -50,6 +50,7 @@
     onConfigChange(cfg);
   }
 
+  // 필드 타입 가져오기
   export function getFieldTypeByName(name: string): DataFieldType | undefined {
     const field = fields.find((field) => name === field.name);
     return field?.type;
@@ -212,6 +213,7 @@
       fieldConfig: { ...tableFields },
     });
   }
+
 </script>
 
 <ViewLayout>
