@@ -4,7 +4,7 @@
   "version": "1.17.4",
   "minAppVersion": "1.0.0",
   "description": "Plain text project planning.",
-  "author": "Marcus Olsson",
+  "author": "Marcus Olsson (Original), Jiho Yang (Modified)",
   "authorUrl": "https://marcus.se.net",
   "fundingUrl": "https://www.buymeacoffee.com/marcusolsson",
   "isDesktopOnly": false
