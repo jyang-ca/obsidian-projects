@@ -80,6 +80,7 @@ If you'd like to see Projects in action, check out any of these amazing resource
 - 2022-11-13: [Obsidian Projects: How to Manage Your Note-based Projects in Obsidian](https://www.youtube.com/watch?v=9d9ibSC1TXU) by [@beingpax](https://www.youtube.com/@beingpax)
 - 2022-11-07: [Notion database views in Obsidian Projects plugin](https://www.youtube.com/watch?v=LdaMe2rzAW8) by [@nicolevdh](https://www.youtube.com/@nicolevdh) (interview)
 - 2022-11-07: [Visualiza la base de datos como en Notion dentro de Obsidian](https://www.youtube.com/watch?v=vReObPVS2oo) by [@SniferL4bs](https://www.youtube.com/@SniferL4bs)
+- 2025-06-19: Progress Field Integration and Added visual indicators for progress and due dates (D-Day) in the GridDateCell and FieldControl by [@jyang-ca]
 
 ### Articles
 
