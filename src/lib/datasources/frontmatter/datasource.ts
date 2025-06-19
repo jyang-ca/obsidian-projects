@@ -1,9 +1,9 @@
 import type {
   DataField,
   DataFrame,
-  DataRecord,
-  DataFieldType
+  DataRecord
 } from "src/lib/dataframe/dataframe";
+import { DataFieldType } from "src/lib/dataframe/dataframe";
 import {
   detectFields,
   parseRecords,
