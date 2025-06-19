@@ -173,7 +173,9 @@ export type NumberFieldConfig = {
   // Progress functionality has been moved to DataFieldType.Progress
 };
 
-export type FieldConfig = StringFieldConfig & DateFieldConfig & NumberFieldConfig;
+export type FieldConfig = StringFieldConfig & DateFieldConfig & NumberFieldConfig & {
+  fieldType?: string; // Explicitly store the field type to preserve Progress fields
+};
 
 export type ShowCommand = {
   readonly project: string;

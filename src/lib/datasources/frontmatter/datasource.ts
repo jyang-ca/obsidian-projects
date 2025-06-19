@@ -2,6 +2,7 @@ import type {
   DataField,
   DataFrame,
   DataRecord,
+  DataFieldType
 } from "src/lib/dataframe/dataframe";
 import {
   detectFields,
@@ -68,6 +69,9 @@ export abstract class FrontMatterDataSource extends DataSource {
           ? field
           : {
               ...field,
+              type: this.project.fieldConfig[f]?.fieldType === "progress" 
+                ? DataFieldType.Progress
+                : field.type,
               typeConfig: {
                 ...this.project.fieldConfig?.[f],
                 ...field.typeConfig,

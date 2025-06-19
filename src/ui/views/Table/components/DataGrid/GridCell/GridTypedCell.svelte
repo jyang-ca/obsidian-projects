@@ -5,7 +5,6 @@
     isOptionalList,
     isOptionalNumber,
     isOptionalString,
-    isOptionalProgress,
     type Optional,
     type DataValue,
   } from "src/lib/dataframe/dataframe";
@@ -27,6 +26,17 @@
   export let rowindex: number;
   export let colindex: number;
   export let selected: boolean;
+
+  // Helper function to safely convert value to number for progress
+  function getProgressValue(val: Optional<DataValue>): Optional<number> {
+    if (val === null || val === undefined) return val;
+    if (typeof val === "number") return val;
+    if (typeof val === "string") {
+      const parsed = parseFloat(val);
+      return isNaN(parsed) ? 0 : parsed;
+    }
+    return 0;
+  }
 </script>
 
 {#if column.repeated && isOptionalList(value)}
@@ -73,8 +83,19 @@
     on:mousedown
     on:navigate
   />
-{:else if column.type === "progress" && isOptionalProgress(value)}
+{:else if column.type === "progress"}
   <GridProgressCell
+    {selected}
+    {rowindex}
+    {colindex}
+    value={getProgressValue(value)}
+    onChange={(newValue) => onChange(newValue)}
+    {column}
+    on:mousedown
+    on:navigate
+  />
+{:else if column.type === "date" && column.typeConfig?.time && isOptionalDate(value)}
+  <GridDatetimeCell
     {selected}
     {rowindex}
     {colindex}
@@ -85,33 +106,20 @@
     on:navigate
   />
 {:else if column.type === "date" && isOptionalDate(value)}
-  {#if column.typeConfig?.time}
-    <GridDatetimeCell
-      {selected}
-      {rowindex}
-      {colindex}
-      {value}
-      {onChange}
-      {column}
-      on:mousedown
-      on:navigate
-    />
-  {:else}
-    <GridDateCell
-      {selected}
-      {rowindex}
-      {colindex}
-      {value}
-      {onChange}
-      {column}
-      on:mousedown
-      on:navigate
-    />
-  {/if}
+  <GridDateCell
+    {selected}
+    {rowindex}
+    {colindex}
+    {value}
+    {onChange}
+    {column}
+    on:mousedown
+    on:navigate
+  />
 {:else}
   <GridCell
-    {rowindex}
     {selected}
+    {rowindex}
     {colindex}
     {column}
     on:mousedown

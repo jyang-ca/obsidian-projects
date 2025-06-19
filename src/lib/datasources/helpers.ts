@@ -137,6 +137,12 @@ export function detectCellType(value: unknown): DataFieldType {
     }
     return DataFieldType.String;
   } else if (typeof value === "number") {
+    // Check if the number could be a progress value (0-100)
+    if (value >= 0 && value <= 100 && Number.isInteger(value)) {
+      // This could be either Number or Progress, but we'll default to Number
+      // Progress type should be explicitly set by user
+      return DataFieldType.Number;
+    }
     return DataFieldType.Number;
   } else if (typeof value === "boolean") {
     return DataFieldType.Boolean;

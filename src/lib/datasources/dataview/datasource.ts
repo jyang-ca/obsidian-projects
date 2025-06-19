@@ -6,6 +6,7 @@ import {
   type DataField,
   type DataFrame,
   type DataRecord,
+  DataFieldType,
 } from "src/lib/dataframe/dataframe";
 import type { IFileSystem } from "src/lib/filesystem/filesystem";
 import { i18n } from "src/lib/stores/i18n";
@@ -75,6 +76,9 @@ export class DataviewDataSource extends DataSource {
           ? field
           : {
               ...field,
+              type: this.project.fieldConfig[f]?.fieldType === "progress" 
+                ? DataFieldType.Progress
+                : field.type,
               typeConfig: {
                 ...this.project.fieldConfig?.[f],
                 ...field.typeConfig,

@@ -1,7 +1,7 @@
 <script lang="ts">
   import GridCell from "../GridCell.svelte";
   import NumberInput from "../GridNumberCell/NumberInput.svelte";
-  import { isProgress, type Optional } from "src/lib/dataframe/dataframe";
+  import { type Optional } from "src/lib/dataframe/dataframe";
   import type { GridColDef } from "../../dataGrid";
 
   export let value: Optional<number>;
@@ -41,7 +41,7 @@
   }}
 >
   <svelte:fragment slot="read">
-    {#if isProgress(value)}
+    {#if value !== null && value !== undefined}
       <div class="progress-label">
         {value}%
       </div>

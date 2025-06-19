@@ -139,12 +139,21 @@
         behavior: "smooth",
       });
 
-      if (field.typeConfig) {
+      if (field.typeConfig || field.type === DataFieldType.Progress) {
+        const fieldConfig = {
+          ...field.typeConfig,
+        };
+        
+        // Store fieldType for Progress fields to preserve their type
+        if (field.type === DataFieldType.Progress) {
+          fieldConfig.fieldType = DataFieldType.Progress;
+        }
+        
         settings.updateFieldConfig(
           project.id,
           field.name,
           fields.map((f) => f.name),
-          field.typeConfig
+          fieldConfig
         );
       }
     }).open();
@@ -155,12 +164,21 @@
       const position = fields.findIndex((f) => anchor === f.name) + direction;
       await api.addField(field, value, position);
 
-      if (field.typeConfig) {
+      if (field.typeConfig || field.type === DataFieldType.Progress) {
+        const fieldConfig = {
+          ...field.typeConfig,
+        };
+        
+        // Store fieldType for Progress fields to preserve their type
+        if (field.type === DataFieldType.Progress) {
+          fieldConfig.fieldType = DataFieldType.Progress;
+        }
+        
         settings.updateFieldConfig(
           project.id,
           field.name,
           fields.map((f) => f.name),
-          field.typeConfig
+          fieldConfig
         );
       }
 
@@ -292,12 +310,21 @@
                   }
                 }
 
-                if (field.typeConfig) {
+                if (field.typeConfig || field.type === DataFieldType.Progress) {
+                  const fieldConfig = {
+                    ...field.typeConfig,
+                  };
+                  
+                  // Store fieldType for Progress fields to preserve their type
+                  if (field.type === DataFieldType.Progress) {
+                    fieldConfig.fieldType = DataFieldType.Progress;
+                  }
+                  
                   settings.updateFieldConfig(
                     project.id,
                     field.name,
                     fields.map((f) => f.name),
-                    field.typeConfig
+                    fieldConfig
                   );
                 }
 

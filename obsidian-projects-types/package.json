@@ -5,7 +5,7 @@
   "scripts": {
     "build": "tsc"
   },
-  "author": "Marcus Olsson",
+  "author": "Marcus Olsson, Jiho Yang (Modified)",
   "license": "MIT",
   "devDependencies": {
     "typescript": "^4.8.3"
